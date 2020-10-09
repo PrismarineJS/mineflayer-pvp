@@ -29,12 +29,31 @@ These plugins must be loaded using `bot.loadPlugin` in order to use this plugin.
 The brief description goes here.
 
 ```js
-// Create your bot
-const mineflayer = require("mineflayer");
-const bot = mineflayer.createBot({ username: "Player" });
+const mineflayer = require('mineflayer')
+const { pathfinder, Movements, goals } = require('mineflayer-pathfinder')
+const pvp = require('mineflayer-pvp').plugin
 
-// Do stuff
-bot.doStuff()
+const bot = mineflayer.createBot({ 'Guard' })
+
+bot.loadPlugin(pathfinder)
+bot.loadPlugin(pvp)
+
+bot.on('chat', (username, message) => {
+  if (message === 'fight me') {
+    const player = bot.players[username]
+
+    if (!player) {
+      bot.chat("I can't see you.")
+      return
+    }
+
+    bot.pvp.attack(player.entity)
+  }
+
+  if (message === 'stop') {
+    bot.pvp.stop()
+  }
+})
 ```
 
 ### Documentation
