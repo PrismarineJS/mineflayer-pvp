@@ -10,9 +10,13 @@ import { TaskQueue } from 'mineflayer-utils';
 export class PVP
 {
     private readonly bot: Bot;
-    private target?: Entity;
     private timeToNextAttack: number = 0;
     private wasInRange: boolean = false;
+
+    /**
+     * The current target. This value should never be assigned to from outside the plugin.
+     */
+    target?: Entity;
 
     /**
      * The movements object to pass to pathfinder when creating the follow entity goal. Assign
@@ -56,6 +60,7 @@ export class PVP
         this.movements = new Movements(bot, require('minecraft-data')(bot.version));
 
         this.bot.on('physicTick', () => this.update());
+        this.bot.on('entityGone', e => { if (e === this.target) this.stop(); })
     }
 
     /**
@@ -65,6 +70,8 @@ export class PVP
      */
     attack(target: Entity): void
     {
+        if (target === this.target) return;
+
         this.stop();
         this.target = target;
         this.timeToNextAttack = 0;
@@ -77,6 +84,9 @@ export class PVP
 
         // @ts-expect-error The 'true' argument wasn't added to the typing until after 1.0.10 release.
         pathfinder.setGoal(new goals.GoalFollow(this.target, this.followRange), true);
+
+        // @ts-expect-error
+        this.bot.emit('startedAttacking');
     }
 
     /**
@@ -89,6 +99,9 @@ export class PVP
         // @ts-expect-error
         const pathfinder: Pathfinder = this.bot.pathfinder;
         pathfinder.setGoal(null);
+
+        // @ts-expect-error
+        this.emit('stoppedAttacking');
     }
 
     /**
@@ -96,9 +109,9 @@ export class PVP
      */
     private update(): void
     {
-        if (!this.target) return;
-
         this.checkRange();
+
+        if (!this.target) return;
 
         this.timeToNextAttack--;
         if (this.timeToNextAttack === -1)
@@ -112,7 +125,15 @@ export class PVP
     {
         if (!this.target) return;
 
-        const inRange = this.target.position.distanceTo(this.bot.entity.position) <= this.attackRange;
+        const dist = this.target.position.distanceTo(this.bot.entity.position);
+
+        if (dist > this.viewDistance)
+        {
+            this.stop();
+            return;
+        }
+
+        const inRange = dist <= this.attackRange;
 
         if (!this.wasInRange && inRange)
             this.timeToNextAttack = 0;
@@ -151,12 +172,16 @@ export class PVP
         queue.addSync(() => {
             if (target !== this.target) throw 'Target changed!';
             this.bot.attack(this.target);
+
+            // @ts-expect-error
+            this.emit('attackedTarget');
         });
 
         if (shield)
         {
             queue.add(cb => setTimeout(cb, 150))
             queue.addSync(() => {
+                if (target !== this.target) throw 'Target changed!';
                 if (this.hasShield())
                     // @ts-expect-error TODO Mineflayer is missing the parameter in d.ts in version 2.30.0
                     this.bot.activateItem(true)

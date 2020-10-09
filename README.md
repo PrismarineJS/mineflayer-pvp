@@ -22,8 +22,7 @@ npm install --save mineflayer-pvp
 **Plugin Dependencies**
 These plugins must be loaded using `bot.loadPlugin` in order to use this plugin.
 
-[**mineflayer-pathfinder**](https://github.com/Karang/mineflayer-pathfinder)
-[**mineflayer-armor-manager**](https://github.com/G07cha/MineflayerArmorManager)
+* [**mineflayer-pathfinder**](https://github.com/Karang/mineflayer-pathfinder)
 
 ### Simple Bot
 
