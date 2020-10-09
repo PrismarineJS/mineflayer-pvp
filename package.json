@@ -1,0 +1,37 @@
+{
+  "name": "mineflayer-plugin-template",
+  "version": "1.0.0",
+  "description": "A template repository for creating Mineflayer plugins using Typescript.",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf lib",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheDudeFromCI/mineflayer-plugin-template.git"
+  },
+  "keywords": [
+    "mineflayer",
+    "plugin",
+    "template"
+  ],
+  "author": "TheDudeFromCI",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TheDudeFromCI/mineflayer-plugin-template/issues"
+  },
+  "homepage": "https://github.com/TheDudeFromCI/mineflayer-plugin-template#readme",
+  "dependencies": {
+    "mineflayer": "^2.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "14.11.7",
+    "typescript": "4.0.3"
+  },
+  "files": [
+    "lib/**/*"
+  ]
+}
