@@ -1,9 +1,9 @@
-const attackSpeeds = require('./AttackSpeeds.json');
+import * as attackSpeeds from './AttackSpeeds.json';
 
 export function getAttackSpeed(weaponName: string): number
 {
     if (!weaponName) return attackSpeeds.other;
-    return attackSpeeds[weaponName] || attackSpeeds.other;
+    return (<any>attackSpeeds)[weaponName] || attackSpeeds.other;
 }
 
 function clamp(x: number, min: number, max: number): number

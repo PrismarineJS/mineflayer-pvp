@@ -34,7 +34,8 @@ export class RandomTicks implements TimingSolver
     /** @inheritdoc */
     getTicks(): number
     {
-        return Math.floor(Math.random() * (this.max - this.min) + this.min);
+        const ticks = Math.floor(Math.random() * (this.max - this.min) + this.min);
+        return Math.max(1, ticks);
     }
 }
 
@@ -48,7 +49,7 @@ export class MaxDamageOffset implements TimingSolver
     readonly min: number;
     readonly max: number;
 
-    constructor(min: number = -4, max: number = 6)
+    constructor(min: number = -2, max: number = 2)
     {
         this.min = min;
         this.max = max;
@@ -58,7 +59,8 @@ export class MaxDamageOffset implements TimingSolver
     getTicks(bot: Bot): number
     {
         const heldItem = bot.inventory.slots[bot.getEquipmentDestSlot('hand')];
-        const cooldown = getCooldown(heldItem.name);
-        return Math.floor(Math.random() * (this.max - this.min) + this.min) + cooldown;
+        const cooldown = getCooldown(heldItem?.name);
+        const ticks = Math.floor(Math.random() * (this.max - this.min) + this.min) + cooldown;
+        return Math.max(1, ticks);
     }
 }

@@ -101,7 +101,7 @@ export class PVP
         pathfinder.setGoal(null);
 
         // @ts-expect-error
-        this.emit('stoppedAttacking');
+        this.bot.emit('stoppedAttacking');
     }
 
     /**
@@ -124,6 +124,7 @@ export class PVP
     private checkRange(): void
     {
         if (!this.target) return;
+        if (this.timeToNextAttack < 0) return;
 
         const dist = this.target.position.distanceTo(this.bot.entity.position);
 
@@ -174,7 +175,7 @@ export class PVP
             this.bot.attack(this.target);
 
             // @ts-expect-error
-            this.emit('attackedTarget');
+            this.bot.emit('attackedTarget');
         });
 
         if (shield)
