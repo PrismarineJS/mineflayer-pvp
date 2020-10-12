@@ -16,7 +16,7 @@ function clamp(x: number, min: number, max: number): number
 export function getCooldown(weaponName: string): number
 {
     const speed = getAttackSpeed(weaponName);
-    return 1 / speed * 20;
+    return Math.floor(1 / speed * 20);
 }
 
 export function getDamageMultiplier(weaponName: string): number
