@@ -184,7 +184,6 @@ export class PVP
             queue.addSync(() => {
                 if (target !== this.target) throw 'Target changed!';
                 if (this.hasShield())
-                    // @ts-expect-error TODO Mineflayer is missing the parameter in d.ts in version 2.30.0
                     this.bot.activateItem(true)
             })
         }
