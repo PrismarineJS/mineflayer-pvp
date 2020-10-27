@@ -82,7 +82,6 @@ export class PVP
         const pathfinder: Pathfinder = this.bot.pathfinder;
         if (this.movements) pathfinder.setMovements(this.movements);
 
-        // @ts-expect-error The 'true' argument wasn't added to the typing until after 1.0.10 release.
         pathfinder.setGoal(new goals.GoalFollow(this.target, this.followRange), true);
 
         // @ts-expect-error
@@ -98,6 +97,7 @@ export class PVP
 
         // @ts-expect-error
         const pathfinder: Pathfinder = this.bot.pathfinder;
+        // @ts-expect-error Not in typescript definition, yet.
         pathfinder.setGoal(null);
 
         // @ts-expect-error

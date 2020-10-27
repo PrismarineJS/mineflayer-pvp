@@ -25,10 +25,9 @@
   },
   "homepage": "https://github.com/TheDudeFromCI/mineflayer-pvp#readme",
   "dependencies": {
-    "mineflayer": "^2.30.0",
-    "mineflayer-pathfinder": "^1.0.10",
-    "mineflayer-utils": "^0.1.4",
-    "prismarine-entity": "^1.0.0"
+    "mineflayer": "^2.32.0",
+    "mineflayer-pathfinder": "^1.0.11",
+    "mineflayer-utils": "^0.1.4"
   },
   "devDependencies": {
     "@types/node": "^14.14.2",
