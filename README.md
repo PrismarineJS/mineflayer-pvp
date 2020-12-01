@@ -62,6 +62,10 @@ bot.on('chat', (username, message) => {
 
 [Examples](https://github.com/TheDudeFromCI/mineflayer-pvp/tree/master/examples)
 
+**Video Tutorial:**
+
+<a href="https://youtu.be/Giu0ADA5uo8"><img src="https://img.youtube.com/vi/Giu0ADA5uo8/hqdefault.jpg" width="256" /></a>
+
 ### License
 
 This project uses the [MIT](https://github.com/TheDudeFromCI/mineflayer-pvp/blob/master/LICENSE) license.
