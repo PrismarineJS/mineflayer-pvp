@@ -93,6 +93,8 @@ export class PVP
      */
     stop(): void
     {
+        if (this.target == null) return
+
         this.target = undefined;
 
         // @ts-expect-error
