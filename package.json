@@ -25,8 +25,8 @@
   },
   "homepage": "https://github.com/TheDudeFromCI/mineflayer-pvp#readme",
   "dependencies": {
-    "mineflayer": "^3.0.0",
-    "mineflayer-pathfinder": "^1.0.11",
+    "mineflayer": "^3.11.0",
+    "mineflayer-pathfinder": "^1.7.0",
     "mineflayer-utils": "^0.1.4"
   },
   "devDependencies": {

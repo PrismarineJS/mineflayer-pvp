@@ -44,14 +44,14 @@ export class PVP
     /**
      * The timing solver to use when deciding how long to wait before preforming another attack
      * after finishing an attack.
-     * 
+     *
      * // TODO Check for 'hasAtttackCooldown' feature. If feature not present, default to RandomTicks solver.
      */
     meleeAttackRate: TimingSolver = new MaxDamageOffset();
 
     /**
      * Creates a new instance of the PVP plugin.
-     * 
+     *
      * @param bot - The bot this plugin is being attached to.
      */
     constructor(bot: Bot)
@@ -65,7 +65,7 @@ export class PVP
 
     /**
      * Causes the bot to begin attacking an entity until it is killed or told to stop.
-     * 
+     *
      * @param target - The target to attack.
      */
     attack(target: Entity): void
@@ -78,7 +78,6 @@ export class PVP
 
         if (!this.target) return;
 
-        // @ts-expect-error
         const pathfinder: Pathfinder = this.bot.pathfinder;
         if (this.movements) pathfinder.setMovements(this.movements);
 
@@ -97,9 +96,8 @@ export class PVP
 
         this.target = undefined;
 
-        // @ts-expect-error
         const pathfinder: Pathfinder = this.bot.pathfinder;
-        // @ts-expect-error Not in typescript definition, yet.
+        // Not in typescript definition, yet.
         pathfinder.setGoal(null);
 
         // @ts-expect-error
@@ -166,7 +164,7 @@ export class PVP
             queue.addSync(() => this.bot.deactivateItem())
             queue.add(cb => setTimeout(cb, 100))
         }
-            
+
         queue.add(cb => {
             if (target !== this.target) throw 'Target changed!';
             this.bot.lookAt(this.target.position.offset(0, this.target.height, 0), true, cb)
@@ -205,7 +203,7 @@ export class PVP
 
         const slot = this.bot.inventory.slots[this.bot.getEquipmentDestSlot('off-hand')];
         if (!slot) return false;
-    
+
         return slot.name.includes('shield');
     }
 }
