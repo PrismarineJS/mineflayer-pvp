@@ -68,11 +68,11 @@ export class PVP
      *
      * @param target - The target to attack.
      */
-    attack(target: Entity): void
+    async attack(target: Entity): Promise<void>
     {
         if (target === this.target) return;
 
-        this.stop();
+        await this.stop();
         this.target = target;
         this.timeToNextAttack = 0;
 
@@ -90,14 +90,65 @@ export class PVP
     /**
      * Stops attacking the current entity.
      */
-    stop(): void
+    async stop(): Promise<void>
     {
         if (this.target == null) return
 
         this.target = undefined;
 
         const pathfinder: Pathfinder = this.bot.pathfinder;
-        // Not in typescript definition, yet.
+        pathfinder.stop();
+
+        try {
+            await this.onceWithTimeout('path_stop', 5000)
+        } catch (err) {
+            // @ts-expect-error
+            this.bot.removeAllListeners('path_stop')
+            pathfinder.setGoal(null)
+        }
+        
+        // @ts-expect-error
+        this.bot.emit('stoppedAttacking');
+    }
+
+    /**
+     * Resolve if event fires within the timeout. Rejects if the event did not fire within the timeout.
+     * @param eventName Event name to listen to
+     * @param timeout Timeout in ms
+     * @returns {Promise<void>}
+     */
+    async onceWithTimeout(eventName: string, timeout: number): Promise<void>
+    {
+        let callback = () => {}
+        let timeoutId: NodeJS.Timeout
+        const cleanup = (): void => {
+            clearTimeout(timeoutId)
+            this.bot.removeListener(eventName as any, callback)
+        }
+        return new Promise((resolve, reject) => {
+            callback = (): void => {
+                cleanup()
+                resolve()
+            }
+            this.bot.once(eventName as any, callback)
+            timeoutId = setTimeout(() => {
+                cleanup()
+                reject()
+            }, timeout)
+        })
+    }
+
+    /**
+     * Stops attacking the current entity. Force stops pathfinder. May result in the bot falling off of things or failing jumps.
+     * @returns void
+     */
+    forceStop(): void
+    {
+        if (this.target == null) return
+
+        this.target = undefined;
+
+        const pathfinder: Pathfinder = this.bot.pathfinder;
         pathfinder.setGoal(null);
 
         // @ts-expect-error

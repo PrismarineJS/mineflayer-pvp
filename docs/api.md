@@ -20,6 +20,10 @@ Welcome to the *mineflayer-pvp* API documentation page.
 
   Stops attacking the target entity.
 
+* `bot.pvp.forceStop()`
+
+  Stops attacking the target entity. Forces pathfinder to stop.
+
 * `bot.pvp.movements`
 
   The pathfinder movements config to use when pursuing a target.
