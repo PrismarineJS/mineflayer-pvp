@@ -18,6 +18,7 @@ bot.loadPlugin(pathfinder)
 bot.loadPlugin(pvp)
 
 let guardPos = null
+let movingToGuardPos = false
 
 // Assign the given location to be guarded
 function guardArea (pos) {
@@ -30,17 +31,30 @@ function guardArea (pos) {
 }
 
 // Cancel all pathfinder and combat
-function stopGuarding () {
+async function stopGuarding () {
+  movingToGuardPos = false
   guardPos = null
-  bot.pvp.stop()
-  bot.pathfinder.setGoal(null)
+  await bot.pvp.stop()
 }
 
 // Pathfinder to the guard position
-function moveToGuardPos () {
+async function moveToGuardPos () {
+  // Do nothing if we are already moving to the guard position
+  if (movingToGuardPos) return
+  // console.info('Moving to guard pos')
   const mcData = require('minecraft-data')(bot.version)
   bot.pathfinder.setMovements(new Movements(bot, mcData))
-  bot.pathfinder.setGoal(new goals.GoalBlock(guardPos.x, guardPos.y, guardPos.z))
+  try {
+    movingToGuardPos = true
+    // Wait for pathfinder to go to the guarding position
+    await bot.pathfinder.goto(new goals.GoalNear(guardPos.x, guardPos.y, guardPos.z, 2))
+    movingToGuardPos = false
+  } catch (err) {
+    // Catch errors when pathfinder is interrupted by the pvp plugin or if pathfinder cannot find a path
+    movingToGuardPos = false
+    // console.warn(err)
+    // console.warn('Mineflayer-pvp encountered a pathfinder error')
+  }
 }
 
 // Called when the bot has killed it's target.
@@ -51,17 +65,29 @@ bot.on('stoppedAttacking', () => {
 })
 
 // Check for new enemies to attack
-bot.on('physicTick', () => {
+bot.on('physicTick', async () => {
   if (!guardPos) return // Do nothing if bot is not guarding anything
 
-  // Only look for mobs within 16 blocks
-  const filter = e => e.type === 'mob' && e.position.distanceTo(bot.entity.position) < 16 &&
-                    e.mobType !== 'Armor Stand' // Mojang classifies armor stands as mobs for some reason?
+  let entity = null
+  // Do not attack mobs if the bot is to far from the guard pos
+  if (bot.entity.position.distanceTo(guardPos) < 16) {
+    // Only look for mobs within 16 blocks
+    const filter = e => e.type === 'mob' && e.position.distanceTo(bot.entity.position) < 16 &&
+    e.mobType !== 'Armor Stand' // Mojang classifies armor stands as mobs for some reason?
 
-  const entity = bot.nearestEntity(filter)
-  if (entity) {
-    // Start attacking
+    entity = bot.nearestEntity(filter)
+  }
+  
+  if (entity != null && !movingToGuardPos) {
+    // If we have an enemy and we are not moving back to the guarding position: Start attacking
     bot.pvp.attack(entity)
+  } else {
+    // If we do not have an enemy or if we are moving back to the guarding position do this:
+    // If we are close enough to the guarding position do nothing
+    if (bot.entity.position.distanceTo(guardPos) < 2) return
+    // If we are to far stop pvp and move back to the guarding position
+    await bot.pvp.stop()
+    moveToGuardPos()
   }
 })
 
@@ -77,7 +103,8 @@ bot.on('chat', (username, message) => {
     }
 
     bot.chat('I will guard that location.')
-    guardArea(player.entity.position)
+    // Copy the players Vec3 position and guard it
+    guardArea(player.entity.position.clone())
   }
 
   // Stop guarding
