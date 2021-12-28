@@ -107,7 +107,7 @@ export class PVP
             this.bot.removeAllListeners('path_stop')
             pathfinder.setGoal(null)
         }
-        
+
         // @ts-expect-error
         this.bot.emit('stoppedAttacking');
     }
@@ -194,7 +194,7 @@ export class PVP
 
         this.wasInRange = inRange;
     }
-    
+
     /**
      * Blocks a creeper explosion with a shield.
      */
@@ -202,10 +202,10 @@ export class PVP
         if (!this.target || !this.hasShield()) return;
 
         if (
-            this.target.name && 
-            this.target.metadata[16] &&
+            this.target.name &&
             this.target.name === 'creeper' &&
-            typeof entity.metadata[16] === 'number' &&
+            this.target.metadata[16] &&
+            // @ts-ignore
             this.target.metadata[16] === 1
         ) {
             this.blockingExplosion = true;
@@ -214,8 +214,8 @@ export class PVP
             this.bot.lookAt(this.target.position.offset(0, 1, 0), true);
             this.bot.activateItem(true);
 
-            setTimeout(() => { 
-                this.bot.blockingExplosion = true;
+            setTimeout(() => {
+                this.blockingExplosion = false;
             }, 2000)
         }
     }
