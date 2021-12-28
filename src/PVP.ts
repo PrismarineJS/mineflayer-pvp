@@ -12,6 +12,7 @@ export class PVP
     private readonly bot: Bot;
     private timeToNextAttack: number = 0;
     private wasInRange: boolean = false;
+    private blockingExplosion: boolean = false;
 
     /**
      * The current target. This value should never be assigned to from outside the plugin.
@@ -160,9 +161,10 @@ export class PVP
      */
     private update(): void
     {
+        this.checkExplosion();
         this.checkRange();
 
-        if (!this.target) return;
+        if (!this.target || this.blockingExplosion) return;
 
         this.timeToNextAttack--;
         if (this.timeToNextAttack === -1)
@@ -191,6 +193,31 @@ export class PVP
             this.timeToNextAttack = 0;
 
         this.wasInRange = inRange;
+    }
+    
+    /**
+     * Blocks a creeper explosion with a shield.
+     */
+    private checkExplosion() {
+        if (!this.target || !this.hasShield()) return;
+
+        if (
+            this.target.name && 
+            this.target.metadata[16] &&
+            this.target.name === 'creeper' &&
+            typeof entity.metadata[16] === 'number' &&
+            this.target.metadata[16] === 1
+        ) {
+            this.blockingExplosion = true;
+
+            this.bot.pathfinder.stop();
+            this.bot.lookAt(this.target.position.offset(0, 1, 0), true);
+            this.bot.activateItem(true);
+
+            setTimeout(() => { 
+                this.bot.blockingExplosion = true;
+            }, 2000)
+        }
     }
 
     /**
