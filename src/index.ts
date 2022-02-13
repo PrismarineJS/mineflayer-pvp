@@ -9,5 +9,11 @@ export function plugin(bot: Bot)
     bot.pvp = pvp;
 }
 
+declare module "mineflayer" {
+    interface Bot {
+        pvp: PVP;
+    }
+}
+
 export * from './Cooldown';
 export * from './TimingSolver';
