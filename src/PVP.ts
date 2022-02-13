@@ -245,7 +245,7 @@ export class PVP
 
         queue.add(cb => {
             if (target !== this.target) throw 'Target changed!';
-            this.bot.lookAt(this.target.position.offset(0, this.target.height, 0), true).then(cb);
+            this.bot.lookAt(this.target.position.offset(0, this.target.height, 0), true).then(() => cb()).catch(err => cb(err));
         });
 
         queue.addSync(() => {
