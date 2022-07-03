@@ -103,7 +103,6 @@ export class PVP
         try {
             await this.onceWithTimeout('path_stop', 5000)
         } catch (err) {
-            // @ts-expect-error
             this.bot.removeAllListeners('path_stop')
             pathfinder.setGoal(null)
         }
