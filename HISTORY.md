@@ -1,3 +1,7 @@
+## 1.3.2
+
+* fix deploy
+
 ## 1.3.1
   
 * fix ts error
