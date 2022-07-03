@@ -1,3 +1,7 @@
+## 1.3.0
+
+* bump pathfinder
+
 ## 1.2.1
 
 * Fix types
