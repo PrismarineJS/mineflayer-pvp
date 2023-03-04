@@ -40,7 +40,7 @@ export class PVP
     /**
      * How close must the bot be to the target in order to try attacking it.
      */
-    attackRange: number = 3.5;
+    attackRange: number = 3.0;
 
     /**
      * The timing solver to use when deciding how long to wait before preforming another attack
