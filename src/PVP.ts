@@ -46,7 +46,7 @@ export class PVP
      * The timing solver to use when deciding how long to wait before preforming another attack
      * after finishing an attack.
      *
-     * // TODO Check for 'hasAtttackCooldown' feature. If feature not present, default to RandomTicks solver.
+     * // TODO Check for 'hasAttackCooldown' feature. If feature not present, default to RandomTicks solver.
      */
     meleeAttackRate: TimingSolver = new MaxDamageOffset();
 
