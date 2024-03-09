@@ -59,7 +59,8 @@ export class MaxDamageOffset implements TimingSolver
     getTicks(bot: Bot): number
     {
         const heldItem = bot.inventory.slots[bot.getEquipmentDestSlot('hand')];
-        const cooldown = getCooldown(heldItem?.name);
+        const itemName = heldItem?.name ?? ''; // Use empty string if name is null or undefined
+        const cooldown = getCooldown(itemName);
         const ticks = Math.floor(Math.random() * (this.max - this.min) + this.min) + cooldown;
         return Math.max(1, ticks);
     }
