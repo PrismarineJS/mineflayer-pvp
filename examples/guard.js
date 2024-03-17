@@ -71,11 +71,9 @@ bot.on('physicsTick', async () => {
   let entity = null
   // Do not attack mobs if the bot is to far from the guard pos
   if (bot.entity.position.distanceTo(guardPos) < 16) {
-    // Only look for mobs within 16 blocks
-   const filter = e => (e.type === 'hostile' || e.type === 'mob') && e.position.distanceTo(bot.entity.position) < 10 && e.mobType !== 'Armor Stand'
-    e.mobType !== 'Armor Stand' // Mojang classifies armor stands as mobs for some reason?
-
-    entity = bot.nearestEntity(filter)
+      // Only look for mobs within 16 blocks
+      const filter = e => (e.type === 'hostile' || e.type === 'mob') && e.position.distanceTo(bot.entity.position) < 10 && e.displayName !== 'Armor Stand' // Mojang classifies armor stands as mobs for some reason?
+      entity = bot.nearestEntity(filter)
   }
   
   if (entity != null && !movingToGuardPos) {
