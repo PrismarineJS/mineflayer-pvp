@@ -65,7 +65,7 @@ bot.on('stoppedAttacking', () => {
 })
 
 // Check for new enemies to attack
-bot.on('physicTick', async () => {
+bot.on('physicsTick', async () => {
   if (!guardPos) return // Do nothing if bot is not guarding anything
 
   let entity = null

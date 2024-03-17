@@ -58,9 +58,9 @@ export class PVP
     constructor(bot: Bot)
     {
         this.bot = bot;
-        this.movements = new Movements(bot, require('minecraft-data')(bot.version));
+        this.movements = new Movements(bot);
 
-        this.bot.on('physicTick', () => this.update());
+        this.bot.on('physicsTick', () => this.update());
         this.bot.on('entityGone', e => { if (e === this.target) this.stop(); })
     }
 
