@@ -24,7 +24,7 @@ let movingToGuardPos = false
 function guardArea (pos) {
   guardPos = pos
 
-  // We we are not currently in combat, move to the guard pos
+  // We are not currently in combat, move to the guard pos
   if (!bot.pvp.target) {
     moveToGuardPos()
   }
@@ -83,7 +83,7 @@ bot.on('physicsTick', async () => {
     // If we do not have an enemy or if we are moving back to the guarding position do this:
     // If we are close enough to the guarding position do nothing
     if (bot.entity.position.distanceTo(guardPos) < 2) return
-    // If we are to far stop pvp and move back to the guarding position
+    // If we are too far stop pvp and move back to the guarding position
     await bot.pvp.stop()
     moveToGuardPos()
   }
@@ -91,7 +91,7 @@ bot.on('physicsTick', async () => {
 
 // Listen for player commands
 bot.on('chat', (username, message) => {
-  // Guard the location the player is standing
+  // Guard the location where the player is standing
   if (message === 'guard') {
     const player = bot.players[username]
 
