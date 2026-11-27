@@ -99,6 +99,7 @@ export class PVP
 
         const pathfinder: Pathfinder = this.bot.pathfinder;
         pathfinder.stop();
+        if (this.hasShield()) this.bot.deactivateItem();
 
         try {
             await this.onceWithTimeout('path_stop', 5000)
@@ -150,6 +151,7 @@ export class PVP
 
         const pathfinder: Pathfinder = this.bot.pathfinder;
         pathfinder.setGoal(null);
+        if (this.hasShield()) this.bot.deactivateItem();
 
         // @ts-expect-error
         this.bot.emit('stoppedAttacking');
