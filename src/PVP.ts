@@ -232,6 +232,13 @@ export class PVP
             return;
         }
 
+        const targetBlock = this.bot.blockAt(this.target.position.offset(0, this.target.height / 2, 0));
+        if (!targetBlock || !this.bot.canSeeBlock(targetBlock))
+        {
+            this.timeToNextAttack = this.meleeAttackRate.getTicks(this.bot);
+            return;
+        }
+
         const queue = new TaskQueue()
         const target = this.target;
         const shield = this.hasShield();
